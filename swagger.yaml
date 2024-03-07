@@ -1,0 +1,250 @@
+tags:
+- name: empleados
+  description: Endpoints de empleados
+- name: departamentos
+  description: Endpoints de departamentos
+paths:
+# [GET] empleados
+  /employees:
+    get:
+      tags:
+      - empleados
+      summary: Encontrar todos los Empleados
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+# [POST] empleados
+  /employees/{id}:
+    post:
+      tags:
+      - empleados
+      summary: Agregar nuevo Empleado a un Departamento
+      parameters:
+      - name: id
+        in: path
+        description: ID del departamento al que se agregará el empleado
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Información del empleado
+        required: true
+        schema:
+          $ref: '#/definitions/employees'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] empleados/id
+    get:
+      tags:
+      - empleados
+      summary: Buscar por el id del empleado
+      parameters:
+      - name: id
+        in: path
+        description: Id del empleado
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [PUT] empleados/id
+    put:
+      tags:
+      - empleados
+      summary: Actualizar el empleado por el id
+      parameters:
+      - name: id
+        in: path
+        description: Id del empleado
+        required: true
+      - name: body
+        in: body
+        description: Información del empleado
+        required: true
+        schema:
+          $ref: '#/definitions/employees'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [DELETE] empleados/id
+    delete:
+      tags:
+      - empleados
+      summary: Elimina el empleado por el id
+      parameters:
+      - name: id
+        in: path
+        description: Id del empleado
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] departamentos
+  /departments:
+    get:
+      tags:
+      - departamentos
+      summary: Encontrar todos los departamentos
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+# [POST] departamentos
+    post:
+      tags:
+      - departamentos
+      summary: Agregar nuevo Departamento
+      parameters:
+      - name: body
+        in: body
+        description: Información del departamento
+        required: true
+        schema:
+          $ref: '#/definitions/departments'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] departamentos/id
+  /departments/{id}:
+    get:
+      tags:
+      - departamentos
+      summary: Buscar por el id del departamento
+      parameters:
+      - name: id
+        in: path
+        description: Id del departamento
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [PUT] departamentos/id
+    put:
+      tags:
+      - departamentos
+      summary: Actualizar el departamento por el id
+      parameters:
+      - name: id
+        in: path
+        description: Id del departamento
+        required: true
+      - name: body
+        in: body
+        description: Información del departamento
+        required: true
+        schema:
+          $ref: '#/definitions/departments'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [DELETE] departamentos/id
+    delete:
+      tags:
+      - departamentos
+      summary: Elimina el departamento por el id
+      parameters:
+      - name: id
+        in: path
+        description: Id del departamento
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+  
+# definitions
+definitions:
+  employees:
+    type: object
+    required:
+        - name
+        - lastName
+        - role
+    properties:
+      name:
+        type: string
+        description: nombre del empleado
+        default: John
+      lastName:
+        type: string
+        description: apellido del empleado
+        default: Doe
+      role:
+        type: string
+        description: rol del empleado
+        default: Count
+  departments:
+    type: object
+    required:
+        - department_name
+        - description
+        - employees
+    properties:
+      department_name:
+        type: string
+        description: nombre del departamento
+        default: Pruebas
+      description:
+        type: string
+        description: descripción del departamento
+        default: Donde se hacen las pruebas
+      employees:
+        type: array
+        description: Lista de empleados en el departamento
+        items:
+          $ref: '#/definitions/employees'
+        default: []
+schemes:
+ - https
+ - http
