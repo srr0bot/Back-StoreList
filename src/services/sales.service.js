@@ -6,10 +6,10 @@ const { isValidObjectId } = require('mongoose');
 module.exports = {
 
   async findAllSales() {
-    const sales = await SalesModule.find().populate("products.product");
-
+    const sales = await SalesModule.find().populate("products.product").populate("client");
     return sales;
   },
+  
 
 
   async createSale(sale) {

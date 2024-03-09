@@ -8,4 +8,5 @@ router.post('', salesController.createSale);
 router.get('/:date1', salesController.getSalesInDateRange);
 router.get('/getByMonth/:month/:year', salesController.getSalesStatisticsByMonth);
 
+
 module.exports = router;
