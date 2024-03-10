@@ -69,7 +69,7 @@ const initializeUtils = () => {
     app.use(morgan(LOG_FORMAT, { stream }));
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
-    app.use(cors({origin: ["http://localhost:3030"], credentials: false}));
+    app.use(cors({origin: ["http://localhost:3030", "front-store-list.vercel.app"], credentials: false}));
 }
 
 /**
