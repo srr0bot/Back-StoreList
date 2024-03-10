@@ -8,6 +8,7 @@ const productsRouter = require("./products.route.js");
 const salesRouter = require("./sales.route.js");
 
 const userRouter = require("./user.route.js");
+const activityRouter = require("./activityRegister.router.js");
 
 /**
  * Inicializacion de todas las rutas
@@ -17,5 +18,6 @@ router.use("/departments", departmentRouter)
 router.use("/products", productsRouter);
 router.use("/sales", salesRouter);
 router.use("/users", userRouter);
+router.use("/activity", activityRouter)
 
 module.exports = router;

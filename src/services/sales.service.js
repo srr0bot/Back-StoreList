@@ -6,7 +6,10 @@ const { isValidObjectId } = require('mongoose');
 module.exports = {
 
   async findAllSales() {
-    const sales = await SalesModule.find().populate("products.product").populate("client");
+    const sales = await SalesModule.find()
+  .populate('products.product')
+  .populate('client', 'email'); 
+
     return sales;
   },
   
@@ -125,7 +128,8 @@ module.exports = {
         statistics: salesByMonth,
         groupedByIva: groupedByIva,
         salesByIva: detailSalesByIva,
-        salesByIvaSL: await this.findDetailedSalesByIVASL(month, year)
+        salesByIvaSL: await this.findDetailedSalesByIVASL(month, year),
+        summary: await this.getSalesSummary()
       };
     } catch (error) {
       throw error;
@@ -434,6 +438,54 @@ module.exports = {
       });
 
       return salesByIVADetails;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async getSalesSummary() {
+    try {
+      const allSales = await SalesModule.find().populate('client').populate('products.product');
+
+      const productsSold = {};
+
+      allSales.forEach(sale => {
+        sale.products.forEach(product => {
+          const productId = product.product.toString();
+          const productName = product.product.name; // Obtener el nombre del producto
+          if (!productsSold[productName]) {
+            productsSold[productName] = 0;
+          }
+          productsSold[productName] += product.quantity;
+        });
+      });
+
+      // Encontrar el producto más y menos vendido
+      let mostSoldProduct = { productName: '', totalSold: 0 };
+      let leastSoldProduct = { productName: '', totalSold: Number.MAX_SAFE_INTEGER };
+
+      Object.keys(productsSold).forEach(productName => {
+        const totalSold = productsSold[productName];
+        if (totalSold > mostSoldProduct.totalSold) {
+          mostSoldProduct = { productName, totalSold };
+        }
+        if (totalSold < leastSoldProduct.totalSold) {
+          leastSoldProduct = { productName, totalSold };
+        }
+      });
+
+      // Calcular el total de ventas
+      const totalSales = await SalesModule.countDocuments();
+
+      // Calcular el total de usuarios únicos
+      const uniqueUsers = allSales.reduce((users, sale) => {
+        if (!users.includes(sale.client)) {
+          users.push(sale.client);
+        }
+        return users;
+      }, []).length;
+
+      return { mostSoldProduct, leastSoldProduct, totalSales, totalUsers: uniqueUsers };
     } catch (error) {
       throw error;
     }
